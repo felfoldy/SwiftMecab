@@ -348,16 +348,9 @@ final class Mecab_SwiftTests: XCTestCase {
         XCTAssertNil(furigana.first(where: {$0.reading == "じんこう"}))
         XCTAssertNotNil(furigana.first(where: {$0.reading == "せかい"}))
         XCTAssert(furigana.count == 1)
-            
-            
-       
     }
     
-    
-    
-    
-
-    static var allTests = [
+    static let allTests = [
         ("Test Loading", testLoading),
     ]
 }

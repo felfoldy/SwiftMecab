@@ -6,7 +6,7 @@ import Dictionary
 /**
 A tokenizer /  morphological analyzer for Japanese
 */
-public class Tokenizer{
+public class Tokenizer: @unchecked Sendable {
     
     /**
     How to display found tokens in Japanese text
