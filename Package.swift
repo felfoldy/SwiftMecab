@@ -14,6 +14,11 @@ let package = Package(
             targets: ["Mecab-Swift"]),
         
         .library(
+            name: "JapaneseTokenizer",
+            targets: ["JapaneseTokenizer"]
+        ),
+        
+        .library(
                 name: "IPADic",
                 targets: ["IPADic"]),
         
@@ -41,12 +46,23 @@ let package = Package(
         .target(name: "CharacterFilter"),
         .target(name: "StringTools"),
         
+        .target(name: "JapaneseTokenizer",
+                dependencies: [
+                    "Mecab-Swift",
+                    "IPADic"
+                ]),
+
         .target(name: "IPADic", dependencies: ["Dictionary"], resources: [.copy("ipadic dictionary")]),
         
         .testTarget(
             name: "Mecab-SwiftTests",
             dependencies: ["Mecab-Swift", "CharacterFilter", "IPADic"],
             resources: [.copy("Resources/helicobacter.html")]
+        ),
+        
+        .testTarget(
+            name: "JapaneseTokenizerTests",
+            dependencies: ["JapaneseTokenizer"]
         ),
         
         .testTarget(

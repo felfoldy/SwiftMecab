@@ -18,36 +18,20 @@ import Dictionary
  */
 
 public struct Annotation:Equatable, FuriganaAnnotating{
-    
     public let base:String
     public let reading:String
     public let partOfSpeech:PartOfSpeech
     public let range:Range<String.Index>
     public let dictionaryForm:String
-    let transliteration:Tokenizer.Transliteration
+    public let posID: UInt16
     
     init(token:Token, range:Range<String.Index>, transliteration:Tokenizer.Transliteration) {
-        self.init(base: token.original, reading: token.reading, range: range, dictionaryForm: token.dictionaryForm, transliteration: transliteration, POS: token.partOfSpeech)
-    }
-    
-    init(base:String, reading:String, range:Range<String.Index>, dictionaryForm:String, transliteration:Tokenizer.Transliteration, POS:PartOfSpeech = .unknown){
-        self.base=base
-        self.range=range
-        self.partOfSpeech = POS
-        self.transliteration = transliteration
-        
-        switch transliteration {
-        case .katakana:
-            self.reading=reading
-            self.dictionaryForm=dictionaryForm
-        case .hiragana:
-            self.reading=reading.hiraganaString
-            self.dictionaryForm=dictionaryForm.hiraganaString
-        case .romaji:
-            self.reading=reading.romanizedString(method: .hepburn)
-            self.dictionaryForm=dictionaryForm.romanizedString(method: .hepburn)
-        }
-        
+        base = token.original
+        reading = token.reading.hiraganaString
+        self.range = range
+        dictionaryForm = token.dictionaryForm
+        partOfSpeech = token.partOfSpeech
+        self.posID = token.posID
     }
     
     /**

@@ -15,6 +15,9 @@ struct Token{
     let surface:String
     let features:[String]
     let partOfSpeech:PartOfSpeech
+
+    /// IPADic pos-id.
+    let posID: UInt16
     let tokenDescription:TokenIndexProviding
 
     init?(node:mecab_node_t, tokenDescription:TokenIndexProviding & PartOfSpeechProviding) {
@@ -26,7 +29,9 @@ struct Token{
                 else{
             return nil
         }
-       
+
+        posID = node.posid
+
         self.surface=surface
         self.features=features.map({String($0)})
         self.partOfSpeech = tokenDescription.partOfSpeech(posID: node.posid)
