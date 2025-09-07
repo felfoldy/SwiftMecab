@@ -40,26 +40,6 @@ public class Tokenizer: @unchecked Sendable {
         return String(cString: mecab_version(), encoding: .utf8) ?? ""
     }
     
-    
-    
-    fileprivate let isSystemTokenizer:Bool
-
-    #if canImport(CoreFoundation)
-    fileprivate init(){
-        self.isSystemTokenizer=true
-        self.dictionary=SystemDictionary()
-        _mecab=nil
-    }
-    
-    
-     /*
-     The CoreFoundation CFStringTokenizer
-     **/
-    public static let systemTokenizer:Tokenizer = {
-        return Tokenizer()
-    }()
-    #endif
-    
     /**
      Initializes the Tokenizer.
      - parameters:
@@ -69,7 +49,6 @@ public class Tokenizer: @unchecked Sendable {
      */
     public init(dictionary:DictionaryProviding) throws{
         self.dictionary=dictionary
-        self.isSystemTokenizer=false
         let tokenizer=try dictionary.url.withUnsafeFileSystemRepresentation({path->OpaquePointer in
             guard let path=path,
                 let dictPath=String(cString: path).addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
@@ -96,12 +75,7 @@ public class Tokenizer: @unchecked Sendable {
      - returns: An array of `Annotation`, a struct that contains the found tokens (the token value, the reading, POS, etc.).
      */
     public func tokenize(text:String, transliteration:Transliteration = .hiragana)->[Annotation]{
-        if self.isSystemTokenizer{
-            return self.systemTokenizerTokenize(text: text, transliteration: transliteration)
-        }
-        else{
-            return mecabTokenize(text: text, transliteration: transliteration)
-        }
+        mecabTokenize(text: text, transliteration: transliteration)
     }
     
     fileprivate func mecabTokenize(text:String, transliteration:Transliteration = .hiragana)->[Annotation]{

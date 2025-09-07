@@ -80,7 +80,7 @@ final class Mecab_SwiftTests: XCTestCase {
         do{
             let tokenizers=try self.dictionaries.map({
                 try Tokenizer(dictionary: $0)
-            }) + [Tokenizer.systemTokenizer]
+            })
             
             for tokenizer in tokenizers{
             
@@ -109,7 +109,7 @@ final class Mecab_SwiftTests: XCTestCase {
         do{
             let tokenizers=try self.dictionaries.map({
                 try Tokenizer(dictionary: $0)
-            }) + [Tokenizer.systemTokenizer]
+            })
             
             for tokenizer in tokenizers{
                 
@@ -139,7 +139,7 @@ final class Mecab_SwiftTests: XCTestCase {
         do{
             let tokenizers=try self.dictionaries.map({
                 try Tokenizer(dictionary: $0)
-            }) + [Tokenizer.systemTokenizer]
+            })
             
             for tokenizer in tokenizers{
                 XCTAssertNotNil(tokenizer)
@@ -166,7 +166,7 @@ final class Mecab_SwiftTests: XCTestCase {
         do{
             let tokenizers=try self.dictionaries.map({
                 try Tokenizer(dictionary: $0)
-            }) + [Tokenizer.systemTokenizer]
+            })
             
             for tokenizer in tokenizers{
                 XCTAssertNotNil(tokenizer)
@@ -193,7 +193,7 @@ final class Mecab_SwiftTests: XCTestCase {
         do{
             let tokenizers=try self.dictionaries.map({
                 try Tokenizer(dictionary: $0)
-            }) + [Tokenizer.systemTokenizer]
+            })
             
             for tokenizer in tokenizers{
                 XCTAssertNotNil(tokenizer)
@@ -226,8 +226,8 @@ final class Mecab_SwiftTests: XCTestCase {
         do{
             let tokenizers=try self.dictionaries.map({
                 try Tokenizer(dictionary: $0)
-            }) + [Tokenizer.systemTokenizer]
-            
+            })
+
             for tokenizer in tokenizers{
                 XCTAssertNotNil(tokenizer)
                 let tokens =  tokenizer.furiganaAnnotations(for: string, options: [.kanjiOnly])
@@ -246,7 +246,7 @@ final class Mecab_SwiftTests: XCTestCase {
         
         do{
             let htmlURL = Bundle.module.url(forResource: "helicobacter", withExtension: "html", subdirectory: nil)!
-            let htmlText=try String(contentsOf: htmlURL)
+            let htmlText=try String(contentsOf: htmlURL, encoding: .utf8)
             
             let tokenizer=try Tokenizer(dictionary: IPADic())
             
@@ -265,7 +265,7 @@ final class Mecab_SwiftTests: XCTestCase {
         do{
             let tokenizers=try self.dictionaries.map({
                 try Tokenizer(dictionary: $0)
-            }) + [Tokenizer.systemTokenizer]
+            })
             
             for tokenizer in tokenizers{
                 let text="世界人口"
@@ -336,18 +336,6 @@ final class Mecab_SwiftTests: XCTestCase {
         catch let error{
             XCTFail(error.localizedDescription)
         }
-    }
-    
-    
-    func testSystemTokenizer1(){
-        
-        let text="世界人口"
-        let tokenizer=Tokenizer.systemTokenizer
-        let disallowed=SchoolYearFilter.elementary2.disallowedCharacters
-        let furigana=tokenizer.furiganaAnnotations(for: text, transliteration: .hiragana, options: [.kanjiOnly, .filter(disallowedCharacters: disallowed, strict: false)])
-        XCTAssertNil(furigana.first(where: {$0.reading == "じんこう"}))
-        XCTAssertNotNil(furigana.first(where: {$0.reading == "せかい"}))
-        XCTAssert(furigana.count == 1)
     }
     
     static let allTests = [
